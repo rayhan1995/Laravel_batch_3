@@ -64,7 +64,9 @@ class MovieController extends Controller
             $Movie = Movie::whereId($id)->first();
             if ($Movie) {
                 $validator = Validator::make($request->all(), [
-                    'name' => ['required', 'unique:movies,name,' . $id]
+                    'name' => ['required', 'unique:movies,name,' . $id],
+                    'description' => ['required', 'unique:movies,description,' . $id]
+
                 ]);
 
                 if ($validator->fails()) {
@@ -74,6 +76,7 @@ class MovieController extends Controller
                 try {
                     $data = $validator->validated();
                     $data['slug'] = str($data['name'])->slug();
+                    // $data['description'];
 
                     $Movie->update($data);
                     return sendSuccessResponse([], "Movie Updated Successfully!", 202);
